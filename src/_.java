@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 class TaskManager {
@@ -54,13 +55,21 @@ class TaskManager {
         System.out.println("Task not found: " + id);
     }
 
-    public void deleteTask(int id) {
+    public void deleteTask(String input) {
         try {
-            tasks.removeIf(task -> task.getId() == id);
+            if ("all".equalsIgnoreCase(input)) {
+                tasks.clear();
+                System.out.println("All tasks deleted.");
+            } else {
+                int id = Integer.parseInt(input);
+                tasks.removeIf(task -> task.getId() == id);
+                System.out.println("Task deleted: " + id);
+            }
             saveTasks();
-            System.out.println("Task delete " + id);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid input. Please enter a valid task ID or 'all'.");
         } catch (Exception e) {
-            System.err.println("No task id avaiable" + id);
+            System.err.println("An error occurred while deleting tasks.");
             e.printStackTrace();
         }
     }
