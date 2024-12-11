@@ -4,65 +4,57 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 
-
-class TaskManager {
-    private static final String TASKS_FILE = "tasks.json";
-    private final Gson gson = new Gson();
-    public List<Task> tasks;
-
-    public TaskManager() {
-        tasks = loadTasks();
-    }
-
-    private List<Task> loadTasks() {
-        try (Reader reader = new FileReader(TASKS_FILE)) {
-            Type listType = new TypeToken<List<Task>>() {}.getType();
-            return gson.fromJson(reader, listType);
-        } catch (FileNotFoundException e) {
-            return new ArrayList<>();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    private void saveTasks() {
-        try (Writer writer = new FileWriter(TASKS_FILE)) {
-            gson.toJson(tasks, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addTask(String title, String description) {
-        int id = tasks.stream().mapToInt(Task::getId).max().orElse(0) + 1;
-        tasks.add(new Task(id, title, "todo", description));
-        saveTasks();
-    }
-
-    public void updateTask(int id, String title, String description) {
-        for (Task task : tasks) {
-            if (task.getId() == id) {
-                if (title != null) task.setTitle(title);
-                if (description != null) task.setDescription(description);
-                saveTasks();
-                System.out.println("Task updated: " + id);
-                return;
-            }
-        }
-        System.out.println("Task not found: " + id);
-    }
-}
-
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = new TaskManager();
+        Scanner scanner = new Scanner(System.in);
 
-        // Example Usage
-        taskManager.addTask("Write Code", "Finish the coding assignment.");
-        taskManager.updateTask(1, "Write Code - Updated", null);
+        System.out.println("Task Tracker CLI");
+        while (true) {
+            System.out.println("\nCommands: add, update, delete, status, list, exit");
+            System.out.print("> ");
+            String command = scanner.next();
 
-        // Display tasks
-        taskManager.tasks.forEach(System.out::println);
+            switch (command) {
+                case "add" -> {
+                    System.out.print("Title: ");
+                    String title = scanner.next();
+                    System.out.print("Description: ");
+                    String description = scanner.next();
+                    taskManager.addTask(title, description);
+                }
+                case "update" -> {
+                    System.out.print("Task ID: ");
+                    int id = scanner.nextInt();
+                    System.out.print("New Title (or skip): ");
+                    String title = scanner.next();
+                    System.out.print("New Description (or skip): ");
+                    String description = scanner.next();
+                    taskManager.updateTask(id, title, description);
+                }
+                case "delete" -> {
+                    System.out.print("Task ID: ");
+                    int id = scanner.nextInt();
+                    taskManager.deleteTask(id);
+                }
+                case "status" -> {
+                    System.out.print("Task ID: ");
+                    int id = scanner.nextInt();
+                    System.out.print("New Status (todo, in-progress, done): ");
+                    String status = scanner.next();
+                    taskManager.changeStatus(id, status);
+                }
+                case "list" -> {
+                    System.out.print("Status (or all): ");
+                    String status = scanner.next();
+                    taskManager.listTasks(status.equals("all") ? null : status);
+                }
+                case "exit" -> {
+                    System.out.println("Exiting...");
+                    return;
+                }
+                default -> System.out.println("Unknown command");
+            }
+        }
     }
 }
