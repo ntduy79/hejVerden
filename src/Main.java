@@ -9,7 +9,7 @@ public class Main {
         while (true) {
             System.out.println("\nCommands: add, update, delete, status, list, exit");
             System.out.print("> ");
-            String command = scanner.next();
+            String command = scanner.next().toLowerCase(Locale.ROOT);
 
             switch (command) {
                 case "add" -> {
