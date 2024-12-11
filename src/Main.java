@@ -1,7 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.*;
-import java.lang.reflect.Type;
 import java.util.*;
 
 public class Main {
@@ -34,8 +30,9 @@ public class Main {
                 }
                 case "delete" -> {
                     System.out.print("Task ID: ");
-                    int id = scanner.nextInt();
-                    taskManager.deleteTask(id);
+                    scanner = new Scanner(System.in);
+                    String s = scanner.next();
+                    taskManager.deleteTask(s);
                 }
                 case "status" -> {
                     System.out.print("Task ID: ");
