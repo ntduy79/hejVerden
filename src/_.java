@@ -4,7 +4,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 class TaskManager {
@@ -94,5 +93,10 @@ class TaskManager {
         tasks.stream()
                 .filter(task -> status == null || task.getStatus().equals(status))
                 .forEach((System.out::println));
+    }
+
+    public List<Task> getTask() {
+        tasks.forEach((System.out::println));
+        return null;
     }
 }
