@@ -95,8 +95,8 @@ class TaskManager {
                 .forEach((System.out::println));
     }
 
-    public List<Task> getTask() {
-        tasks.forEach((System.out::println));
-        return null;
+    public List<Task> getTasks() {
+        return new ArrayList<>(tasks);
     }
+
 }
