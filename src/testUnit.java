@@ -52,6 +52,7 @@ public class testUnit {
 
     @Test
     void testDeleteTask(){
+        taskManager.deleteTask("all");
         taskManager.addTask("File1", "");
         taskManager.addTask("File2", "");
         taskManager.deleteTask("1");
